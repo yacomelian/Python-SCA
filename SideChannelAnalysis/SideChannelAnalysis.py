@@ -10,10 +10,12 @@ sudo apt install python3-matplotlib python3-path python3-distutils python3-scipy
 pip install path.py numpy scipy matplotlib
 """
 
+# Módulos necesarios
 import os, sys, datetime, path
 import random, numpy, scipy.stats, matplotlib.pyplot as plt
 import binascii
 
+# Datos de author
 __author__ = "Yaco Melian"
 __copyright__ = ""
 __credits__ = ["https://gist.github.com/raullenchai/2920069", "https://www.expobrain.net/2013/07/29/hamming-weights-python-implementation/", "Yaco Melian"]
@@ -22,7 +24,7 @@ __maintainer__ = "Yaco Melian"
 __email__ = "yacomelian@gmail.com"
 __status__ = "Production"
 
-### Variables de trabajo
+### Variables de trabajo predeterminadas
 workpath = os.getcwd() + "/"
 mostrargrafica = True
 cargarficheros = True
@@ -167,26 +169,26 @@ def sca (ldatos, ltraza):
         print ("Maximo encontrado en el momento  :", momento, "Clave : ", key[cnt-1] )
     return ( key, qpi)
 
+# Esta función hace una comprobación de varios mensajes aleatorios para verificar que la clave es correcta
 def comprobar_clave (ldatos, skey):
     from Crypto.Cipher import AES
     from Crypto.Random import get_random_bytes
     from binascii import hexlify,unhexlify
-    numberoftests = 5                   # Al azar elijo el número de pruebas a realizar
-    for i in range (0,numberoftests):      # Hago múltiples comprobaciones
-        nummensaje = random.randint(0,len(ldatos))   # Elijo mensaje aleatorio de los 5mill
-        mensajeacifrar = ldatos[nummensaje][:32]  #   ldatos[nummensaje][:32]
-        hexacifrar = unhexlify(ldatos[nummensaje][:32])  #   ldatos[nummensaje][:32]
-        cifradocorrecto = ldatos[nummensaje][32:].rstrip()
-        mensajecifrado = cifradocorrecto
-        key = unhexlify(binascii.hexlify(bytearray(skey)))
-        cypher = AES.new(key, AES.MODE_ECB)
+    numberoftests = 5                                       # Al azar elijo el número de pruebas a realizar
+    for i in range (0,numberoftests):                       # Hago múltiples comprobaciones
+        nummensaje = random.randint(0,len(ldatos))          # Elijo mensaje aleatorio de los 5mill
+        mensajeacifrar = ldatos[nummensaje][:32]            # El mensaje original recogido del fichero
+        hexacifrar = unhexlify(mensajeacifrar)              # Mensaje a cifrar en formato hexadecimal
+        cifradocorrecto = ldatos[nummensaje][32:].rstrip()  # Extraigo el mensaje ya cifrado que aporta el fichero de entrada
+        key = unhexlify(binascii.hexlify(bytearray(skey)))  # Obtengo la clave en el formato necesario para pasarla a la funcion de cifrado
+        cypher = AES.new(key, AES.MODE_ECB)                 # Función de cifrado
         #print ("Mensaje a cifrar  :", mensajeacifrar)
         #print ("Hex a cifrar      :", hexacifrar)
         #print ("Clave             :", key, " - ")
         #print ("Cifrado correcto  :", cifradocorrecto)
-        mensajecifrado = str( hexlify(cypher.encrypt(hexacifrar)).decode("utf-8") ).upper()
-        output = "Mensaje cifrado : " + mensajecifrado + " Resultado: "
-        if (mensajecifrado == cifradocorrecto):
+        mensajecifrado = str( hexlify(cypher.encrypt(hexacifrar)).decode("utf-8") ).upper() # Hacemos el cifrado con el mensaje original y la clave
+        output = "Mensaje cifrado : " + mensajecifrado + " Resultado: "                     
+        if (mensajecifrado == cifradocorrecto):         # Comprobamos que el cifrado que hemos hecho es igual al que obtenemos del fichero de entrada
             output += "La clave es correcta"
         else:
             output += "Error: la clave es incorrecta"
