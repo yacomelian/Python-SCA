@@ -6,7 +6,7 @@ Practica 1 PAC 1: Side channel analysis de algoritmos criptográficos
 
 
 Requisitos en ubuntu 18:
-sudo apt install python3-matplotlib python3-path python3-distutils python3-scipy python3-numpy python python-tk python-path 
+sudo apt install python3-matplotlib python3-path python3-distutils python3-scipy python3-numpy python3-pycryptodome python python-tk python-path 
 
 pip install path.py numpy scipy matplotlib
 
@@ -173,20 +173,32 @@ def sca (ldatos, ltraza):
 
     return ( key, qpi)
 
-def comprobar_clave (ldatos, key):
-    import Crypto.Cipher
+def comprobar_clave (ldatos, skey):
     from Crypto.Cipher import AES
+    from Crypto.Random import get_random_bytes
+    from binascii import hexlify,unhexlify
     numberoftests = 5                   # Al azar elijo el número de pruebas a realizar
     for i in range (0,numberoftests):      # Hago múltiples comprobaciones
-        mensaje = random.randint(0,len(ldatos))   # Elijo mensaje aleatorio de los 5mill
-        textoacifrar = ldatos[mensaje][:32]
-        cifradocorrecto = ldatos[mensaje][32:]
-        textocifrado = cifradocorrecto
-        #cipher = unhexlify('9B2808B4743D822697AD55243F956A39')
-        textocifrado = AES.new(key, AES.MODE_CBC, iv)
-        print ("Texto a cifrar: ", textoacifrar)
-        print ("Cifrado correcto:", cifradocorrecto)
-        if (textoacifrar == cifradocorrecto):
+        nummensaje = random.randint(0,len(ldatos))   # Elijo mensaje aleatorio de los 5mill
+        mensajeacifrar = ldatos[nummensaje][:32]  #   ldatos[nummensaje][:32]
+        hexacifrar = unhexlify(ldatos[nummensaje][:32])  #   ldatos[nummensaje][:32]
+        cifradocorrecto = ldatos[nummensaje][32:].rstrip()
+        mensajecifrado = cifradocorrecto
+        #key = unhexlify(skey)
+        #key = get_random_bytes(16)
+#        print (key)
+        key = binascii.hexlify(bytearray(skey))
+        print (key)
+        key = unhexlify(key)
+        print (key)
+        cypher = AES.new(key, AES.MODE_ECB)
+        print ("Mensaje a cifrar  :", mensajeacifrar)
+        print ("Hex a cifrar      :", hexacifrar)
+        print ("Clave             :", key, " - ")
+        print ("Cifrado correcto  :", cifradocorrecto)
+        mensajecifrado = str( hexlify(cypher.encrypt(hexacifrar)).decode("utf-8") ).upper()
+        print ("Mensaje cifrado   :", mensajecifrado)
+        if (mensajecifrado == cifradocorrecto):
             print ("La clave es correcta")
         else:
             print ("Error: la clave es incorrecta")
