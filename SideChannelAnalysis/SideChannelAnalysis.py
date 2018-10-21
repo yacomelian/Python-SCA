@@ -5,8 +5,8 @@
 Practica 1 PAC 1: Side channel analysis de algoritmos criptográficos
 
 
-Requisitos
-apt install python python-tk
+Requisitos en ubuntu
+apt install python python-tk python3-matplotlib
 pip install path.py numpy scipy matplotlib
 
 """
@@ -90,7 +90,10 @@ def query_yes_no(question, default="no"):
 
     while True:
         sys.stdout.write(question + prompt)
-        choice = input().lower()
+        try:
+            choice = input().lower()
+        except:
+            choice = input_raw().lower()
         if default is not None and choice == '':
             return valid[default]
         elif choice in valid:
@@ -213,12 +216,9 @@ def main ():
         fdatos=open(str_fdatos,"r")
         ftraza=open(str_ftraza,"r")
 
-
-
         ldatos = fdatos.readlines()
         ltraza = ftraza.readlines()
     
-
         # Inicio el análisis
         result = sca(ldatos,ltraza)
 
