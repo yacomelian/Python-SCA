@@ -202,7 +202,7 @@ def main ():
     if (path.Path(str_fdatos).isfile() and  path.Path(str_ftraza).isfile()):
     # Toma de datos para ejecución
         global cargarficheros, sobreescribirficheros, mostrargrafica
-        cargarficheros = query_yes_no("¿Usar ficheros?", "si")
+        cargarficheros = query_yes_no("¿Usar ficheros ya calculados de coeficientes (si no, se recalcula)?", "si")
         if (not cargarficheros):
             sobreescribirficheros = query_yes_no("¿Desea sobreescribir los ficheros (No para mantener los actuales)?")
         mostrargrafica = query_yes_no("¿Desea visualizar graficas?")
