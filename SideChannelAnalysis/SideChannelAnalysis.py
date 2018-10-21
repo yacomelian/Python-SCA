@@ -3,6 +3,12 @@
 
 """
 Practica 1 PAC 1: Side channel analysis de algoritmos criptográficos
+
+
+Requisitos
+apt install python python-tk
+pip install path.py numpy scipy matplotlib
+
 """
 
 import os, sys, datetime, path
@@ -66,12 +72,10 @@ def hamming_weight( x ):
 # Resuelve preguntas de si, no    
 def query_yes_no(question, default="no"):
 
-    """Ask a yes/no question via raw_input() and return their answer.
-    "question" is a string that is presented to the user.
-    "default" is the presumed answer if the user just hits <Enter>.
-        It must be "yes" (the default), "no" or None (meaning
-        an answer is required of the user).
-    The "answer" return value is True for "yes" or False for "no".
+    """Realiza na pregunta de si o no via input() y devuelve la respuesta.
+    "question" es una cadena que se mostrara al usuario.
+    "default" es la respuesta predeterminada
+    La respuesta se devuelve como True para si, False para no.
     """
     valid = {"si": True, "s": True, 
              "no": False, "n": False}
@@ -82,7 +86,7 @@ def query_yes_no(question, default="no"):
     elif default == "no":
         prompt = " [s/N] "
     else:
-        raise ValueError("invalid default answer: '%s'" % default)
+        raise ValueError("respuesta predeterminada incorrecta: '%s'" % default)
 
     while True:
         sys.stdout.write(question + prompt)
@@ -92,8 +96,8 @@ def query_yes_no(question, default="no"):
         elif choice in valid:
             return valid[choice]
         else:
-            sys.stdout.write("Please respond with 'yes' or 'no' "
-                             "(or 'y' or 'n').\n")
+            sys.stdout.write("Por favor, responda con 'si' o 'no' "
+                             "(or 's' o 'n').\n")
 
 # Funcion principal de calculo
 def sca (ldatos, ltraza):
