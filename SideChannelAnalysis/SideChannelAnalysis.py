@@ -5,8 +5,9 @@
 Practica 1 PAC 1: Side channel analysis de algoritmos criptográficos
 
 
-Requisitos en ubuntu
-apt install python python-tk python3-matplotlib
+Requisitos en ubuntu 18:
+sudo apt install python3-matplotlib python3-path python3-distutils python3-scipy python3-numpy python python-tk python-path 
+
 pip install path.py numpy scipy matplotlib
 
 """
@@ -22,7 +23,7 @@ __author__ = "Yaco Melian"
 __copyright__ = ""
 __credits__ = ["https://gist.github.com/raullenchai/2920069", "https://www.expobrain.net/2013/07/29/hamming-weights-python-implementation/", "Yaco Melian"]
 __version__ = "0.0.1"
-__maintainer__ = "Aymedeyacoran Melian Suarez"
+__maintainer__ = "Yaco Melian"
 __email__ = "yacomelian@gmail.com"
 __status__ = "Production"
 
@@ -91,9 +92,9 @@ def query_yes_no(question, default="no"):
     while True:
         sys.stdout.write(question + prompt)
         try:
-            choice = input().lower()
+            choice = raw_input().lower()
         except:
-            choice = input_raw().lower()
+            choice = input().lower()
         if default is not None and choice == '':
             return valid[default]
         elif choice in valid:
@@ -252,6 +253,10 @@ def main ():
         print ("Error: No existen los archivos de entrada de datos en la ruta:")
         print (workpath)
         print ("Por favor, compruebelo.")
+
+if sys.version_info[0] != 3:
+    print("This script requires Python version 3")
+    sys.exit(1)
     
 main()
 
