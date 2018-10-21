@@ -1,6 +1,8 @@
 #!/usr/bin/env python
-"""Practica 1 PAC 1: Side channel analysis de algoritmos criptográficos
+# -*- coding: utf-8 -*-
 
+"""
+Practica 1 PAC 1: Side channel analysis de algoritmos criptográficos
 """
 
 import os, sys, datetime, path
