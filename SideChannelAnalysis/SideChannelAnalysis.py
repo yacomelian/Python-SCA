@@ -1,23 +1,18 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 """
 Practica 1 PAC 1: Side channel analysis de algoritmos criptográficos
 
-
 Requisitos en ubuntu 18:
 sudo apt install python3-matplotlib python3-path python3-distutils python3-scipy python3-numpy python3-pycryptodome python python-tk python-path 
 
 pip install path.py numpy scipy matplotlib
-
 """
 
 import os, sys, datetime, path
 import random, numpy, scipy.stats, matplotlib.pyplot as plt
 import binascii
-
-
-#from binascii import unhexlify
 
 __author__ = "Yaco Melian"
 __copyright__ = ""
@@ -105,7 +100,7 @@ def sca (ldatos, ltraza):
     numberofmessages = len (ldatos)         # Número de mensajes
     numberoftraces = len(ltraza)            # Longitud total de la línea de trazas
     lenoftraces = int(len(ltraza[0])/2)     # Número total de trazas
-    numberofkeys = 256
+    numberofkeys = 256                      # Claves posible 2^8
 
     #Convierto fichero de trazas de texto a enteros
     # Reservo una matriz primero, optimizacion
@@ -170,7 +165,6 @@ def sca (ldatos, ltraza):
         # El momento nos indica un valor de tiempo, de cuando fue procesada esa clave, debe ocurrir, que cada byte de
         # clave se haya calculado en su momento, es decir, el primer byte de clave, es el primero que aparece en las trazas
         print ("Maximo encontrado en el momento  :", momento, "Clave : ", key[cnt-1] )
-
     return ( key, qpi)
 
 def comprobar_clave (ldatos, skey):
@@ -184,37 +178,21 @@ def comprobar_clave (ldatos, skey):
         hexacifrar = unhexlify(ldatos[nummensaje][:32])  #   ldatos[nummensaje][:32]
         cifradocorrecto = ldatos[nummensaje][32:].rstrip()
         mensajecifrado = cifradocorrecto
-        #key = unhexlify(skey)
-        #key = get_random_bytes(16)
-#        print (key)
-        key = binascii.hexlify(bytearray(skey))
-        print (key)
-        key = unhexlify(key)
-        print (key)
+        key = unhexlify(binascii.hexlify(bytearray(skey)))
         cypher = AES.new(key, AES.MODE_ECB)
-        print ("Mensaje a cifrar  :", mensajeacifrar)
-        print ("Hex a cifrar      :", hexacifrar)
-        print ("Clave             :", key, " - ")
-        print ("Cifrado correcto  :", cifradocorrecto)
+        #print ("Mensaje a cifrar  :", mensajeacifrar)
+        #print ("Hex a cifrar      :", hexacifrar)
+        #print ("Clave             :", key, " - ")
+        #print ("Cifrado correcto  :", cifradocorrecto)
         mensajecifrado = str( hexlify(cypher.encrypt(hexacifrar)).decode("utf-8") ).upper()
-        print ("Mensaje cifrado   :", mensajecifrado)
+        output = "Mensaje cifrado : " + mensajecifrado + " Resultado: "
         if (mensajecifrado == cifradocorrecto):
-            print ("La clave es correcta")
+            output += "La clave es correcta"
         else:
-            print ("Error: la clave es incorrecta")
-
-
-    #Clave CAFEBABEDEADBEEFBADAB000FFAAAAAA
-    
-
-    #cipher = unhexlify('9B2808B4743D822697AD55243F956A39')
-    #aes = AES.new(key, AES.MODE_CBC, iv)
- 
-    #print ( aes.decrypt(cipher.decode('hex')))
-    
+            output += "Error: la clave es incorrecta"
+        print (output)
 
 def main ():
-    
     # Defino los ficheros de entrada
     str_fdatos= workpath + "datos.txt" # contiene en cada fila un mensaje de entrada del algoritmo y, a continuación, el texto cifrado de salida (formato hexadecimal).
     str_ftraza= workpath + "trazas.txt" # contiene en cada fila la señal de consumo de la ejecución del algoritmo en un dispositivo hardware
@@ -255,7 +233,6 @@ def main ():
                 plt.pause(0.05)
             plt.show()
             plt.close
-
         if (comprobarclave == True):
             comprobar_clave (ldatos, result[0])
     else:
